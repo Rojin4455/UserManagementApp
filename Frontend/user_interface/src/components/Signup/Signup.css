@@ -1,0 +1,129 @@
+/* src/components/Signup/Signup.css */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.signup-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.signup-card {
+  background-color: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 350px;
+}
+
+.signup-card h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.signup-form .form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.signup-form .form-row .form-group {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.signup-form .form-row .form-group:last-child {
+  margin-right: 0;
+}
+
+.signup-form .form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.signup-form .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.signup-form .form-group input {
+  width: 100%;
+  padding: 8px 0;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  box-sizing: border-box;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.signup-form .form-group input:focus {
+  border-bottom: 2px solid #667eea;
+}
+
+.signup-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+.signup-button:hover {
+  background-color: #556cd6;
+}
+
+.additional-links {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.additional-links a {
+  color: #667eea;
+  text-decoration: none;
+}
+
+.additional-links a:hover {
+  text-decoration: underline;
+}
+
+
+.message {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 21%;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 14px;
+  z-index: 1000;
+}
+
+.message.success {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}

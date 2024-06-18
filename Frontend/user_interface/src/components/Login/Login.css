@@ -1,0 +1,93 @@
+/* src/components/Login/Login.css */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+  }
+  
+  .login-card {
+    background-color: white;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+  }
+  
+  .login-card h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .login-form .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .login-form .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+  }
+
+  .login-form .form-group input {
+    width: 100%;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .login-form .form-group input:focus {
+    border-bottom: 2px solid #667eea;
+  }
+  
+  
+  .login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .login-button:hover {
+    background-color: #556cd6;
+  }
+  
+  .additional-links {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+  
+  .additional-links a {
+    color: #667eea;
+    text-decoration: none;
+  }
+  
+  .additional-links a:hover {
+    text-decoration: underline;
+  }
+  
