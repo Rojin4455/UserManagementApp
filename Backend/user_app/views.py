@@ -13,6 +13,8 @@ from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import authenticate, login, logout
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+
 
 
 
@@ -69,6 +71,11 @@ class LoginView(APIView):
         if not User.objects.filter(email=email).exists():
             print("not exist email")
             return Response({"error": "Invalid Email Address"}, status=status.HTTP_400_BAD_REQUEST)
+    
+        else:
+            current_user = User.objects.get(email = email)
+            if not current_user.is_active:
+                return Response({"error": "User is Blocked By Admin"}, status=status.HTTP_400_BAD_REQUEST)
         
         user = authenticate(request, username=email, password=password)
 
@@ -180,9 +187,62 @@ class AdminChangeStatus(APIView):
         if users:
             content = {
                 'all_users': users_data,
+                "message": "User status changed successfully"
+            }
+            return Response(content, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+
+class AdminDeleteUser(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self,request):
+        data = request.data
+        user_id = data.get('user_id')
+        try:
+            user = User.objects.get(id = user_id)
+            user.delete()
+            users = User.objects.all()
+            user_info_serializer = GetAllUsersSerializer(users, many=True)
+            users_data = user_info_serializer.data
+
+            if users:
+                content = {
+                    'all_users': users_data,
+                    "message": "User deleted successfully"
+                }
+                return Response(content, status=status.HTTP_200_OK)
+
+        except ObjectDoesNotExist:
+            return Response({'error':'User not Found'},status=status.HTTP_400_BAD_REQUEST)
+        
+
+class AdminCreateUser(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        data = request.data
+        serializer = UserCreateSerializer(data=data)
+        if not serializer.is_valid():
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = serializer.save()
+        user = UserSerializer(user)
+
+        users = User.objects.all()
+        user_info_serializer = GetAllUsersSerializer(users, many=True)
+        users_data = user_info_serializer.data
+        print("userss    :",users)
+        if users:
+            content = {
+                'users': users_data,
             }
             return Response(content, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+    

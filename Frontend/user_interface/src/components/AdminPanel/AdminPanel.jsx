@@ -6,11 +6,14 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/Authentication/AuthenticationSlice';
 import { useSelector } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function AdminPanel() {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [editUser, setEditUser] = useState(null);
+  const [userCreated, setUserCreated] = useState(false);
   const [newUser, setNewUser] = useState({ username: '', email: '' });
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -24,7 +27,7 @@ function AdminPanel() {
     }
   })
 
-  useEffect(() => {
+  useEffect( () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get('admin-home/');
@@ -36,22 +39,60 @@ function AdminPanel() {
       }
     };
 
-    fetchUsers();
-  }, []);
+    fetchUsers()
+  },[]);
 
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+    console.log('search term',searchTerm);
   };
 
-  const handleCreateUser = () => {
+  const handleCreateUser = async () => {
+    try{
+      const response = await axios.post('admin-create-user/',{
+        'first_name' : newUser.first_name,
+        'last_name' : '',
+        'email' : newUser.email,
+        'password' : newUser.password
+      })
+      setUserCreated(true)
+      console.log('pppppppppp',response.data.users);
+      setUsers(response.data.users);
+      console.log('ttttttttttttttttt',users);
+      console.log("success created",response)
+      toast.success('User created successfully!');
+
+    }
+    catch(error){
+      console.log('got error',error);
+    }
+
     // Add user creation logic here
-    setUsers([...users, { ...newUser, id: users.length + 1 }]);
-    setNewUser({ username: '', email: '' });
+    // setUsers([...users, { ...newUser, id: users.length + 1 }]);
+    
+    console.log(newUser);
+
+    console.log(users);
+    setNewUser({ first_name: '', email: '' });
+
   };
 
-  const handleDeleteUser = (id) => {
+  const handleDeleteUser = async (id) => {
     // Add user deletion logic here
+    try {
+      console.log('user id : ',id)
+      const response = await axios.post('admin-delete-user/',{'user_id':id});
+      console.log('Success getting all users after delete', response);
+      setUsers(response.data.all_users);
+      toast.success('User deleted successfully!');
+      
+      console.log("got data's delete" ,response.data.all_users);
+    } catch (error) {
+      console.error('Error fetching admin data delete method', error);
+      toast.error('Failed to delete user.');
+    }
+
     setUsers(users.filter(user => user.id !== id));
   };
 
@@ -73,7 +114,7 @@ function AdminPanel() {
     changeStatus()
   };
 
-  {console.log("dduser",users)}
+  console.log("dduser",users)
   const filteredUsers = users.filter(user =>
     user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -89,6 +130,9 @@ function AdminPanel() {
     <div className="admin-home-wrapper">
   <div className="admin-home-card">
     <h2>Admin Home</h2>
+    <div>
+    <ToastContainer />
+    </div>
     <div className="admin-actions">
       <input
         type="text"
@@ -101,14 +145,20 @@ function AdminPanel() {
         <input
           type="text"
           placeholder="Username"
-          value={newUser.username}
-          onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+          value={newUser.first_name}
+          onChange={(e) => setNewUser({ ...newUser, first_name: e.target.value })}
         />
         <input
           type="email"
           placeholder="Email"
           value={newUser.email}
           onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={newUser.password}
+          onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
         />
         <button onClick={handleCreateUser} className="create-button">Create User</button>
       </div>

@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { login } from '../../redux/Authentication/AuthenticationSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -41,6 +43,7 @@ function Login() {
       localStorage.setItem('refreshToken', refresh);
 
       dispatch(login(userData));
+      toast.success('Logged In successfully!');
       if (!isAdmin){
       navigate('/home')
       }else{
@@ -49,12 +52,17 @@ function Login() {
 
 
     } catch(error){
+      console.log('ee',error.response.data.error)
+      toast.error(error.response.data.error);
       console.log("got error",error)
     }
   }
 
   return (
     <div className="login-wrapper">
+      <div>
+      <ToastContainer />
+      </div>
       <div className="login-card">
         <h2>Login</h2>
         <form onSubmit={handleSubmit} className="login-form">
